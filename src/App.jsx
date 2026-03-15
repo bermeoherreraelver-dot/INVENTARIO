@@ -207,8 +207,18 @@ const Login = ({ onLogin }) => {
             width: '60px', height: '60px', borderRadius: '15px', 
             background: 'linear-gradient(135deg, var(--primary), var(--accent))',
             margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'white', fontSize: '2rem', fontWeight: 800
-          }}>I</div>
+            color: 'white', fontSize: '2rem', fontWeight: 800,
+            overflow: 'hidden',
+            position: 'relative'
+          }}>
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} 
+              onError={(e) => e.target.style.opacity = 0} 
+            />
+            <span style={{ pointerEvents: 'none' }}>I</span>
+          </div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.5rem' }}>Bienvenido</h1>
           <p style={{ color: 'var(--text-muted)' }}>Ingrese sus credenciales de INVENTARIO</p>
         </div>
@@ -1108,8 +1118,18 @@ function App() {
             justifyContent: 'center',
             color: 'white',
             fontWeight: 800,
-            flexShrink: 0
-          }}>I</div>
+            flexShrink: 0,
+            overflow: 'hidden',
+            position: 'relative'
+          }}>
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} 
+              onError={(e) => e.target.style.opacity = 0} 
+            />
+            <span style={{ pointerEvents: 'none' }}>I</span>
+          </div>
           {isSidebarOpen && <span style={{ fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>INVENTARIO</span>}
         </div>
 

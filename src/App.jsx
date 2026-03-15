@@ -177,7 +177,7 @@ const Dashboard = ({ data }) => {
   );
 };
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, settings }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -1129,7 +1129,7 @@ function App() {
   }, []);
 
   if (!user) {
-    return <Login onLogin={handleLogin} />;
+    return <Login onLogin={handleLogin} settings={settings} />;
   }
 
   return (

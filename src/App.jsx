@@ -212,7 +212,7 @@ const Login = ({ onLogin }) => {
             position: 'relative'
           }}>
             <img 
-              src="/logo.png" 
+              src={settings?.logo_base64 || "/logo.png"} 
               alt="Logo" 
               style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} 
               onError={(e) => e.target.style.opacity = 0} 
@@ -931,7 +931,7 @@ const Requisitions = ({ requisitions, products, onUpdate }) => {
 
 // --- Masters Page (Almacenes, Proveedores) ---
 // --- Masters Page (Almacenes, Proveedores, Usuarios) ---
-const Masters = ({ users = [], onUpdate, currentUser }) => {
+const Masters = ({ users = [], onUpdate, currentUser, settings }) => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [userForm, setUserForm] = useState({
     username: '',
@@ -1002,6 +1002,41 @@ const Masters = ({ users = [], onUpdate, currentUser }) => {
           </div>
           <div className="p-8 text-center text-muted" style={{ fontSize: '0.875rem' }}>Módulo de proveedores en desarrollo.</div>
         </div>
+
+        {/* Personalización - Carga de Logo */}
+        <div className="card p-6">
+          <div className="flex justify-between mb-4">
+            <h3 className="flex items-center gap-2"><Settings size={20} /> Personalización</h3>
+          </div>
+          <div style={{ padding: '1rem', border: '1px dashed var(--border)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>Sube el logo de tu empresa</p>
+            <div style={{ width: '80px', height: '80px', margin: '0 auto 1rem', background: 'var(--bg-main)', border: '1px solid var(--border)', borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              {settings?.logo_base64 ? <img src={settings.logo_base64} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Package size={30} color="var(--text-muted)" />}
+            </div>
+            <input 
+              type="file" 
+              id="logo-upload" 
+              accept="image/*" 
+              style={{ display: 'none' }} 
+              onChange={async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = async () => {
+                    await db.updateSetting('logo_base64', reader.result);
+                    onUpdate();
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+            <label 
+              htmlFor="logo-upload" 
+              style={{ padding: '0.5rem 1rem', background: 'var(--primary)', color: 'white', borderRadius: 'var(--radius-md)', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>
+              Cambiar Logo
+            </label>
+          </div>
+        </div>
       </div>
 
       {showUserModal && createPortal(
@@ -1055,6 +1090,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [data, setData] = useState({ products: [], movements: [], warehouses: [], stock: {} });
+  const [settings, setSettings] = useState({ logo_base64: null });
 
   const handleLogout = () => {
     db.logout();
@@ -1078,8 +1114,12 @@ function App() {
   useEffect(() => {
     const init = async () => {
       await db.init();
-      const dbData = await db.getData();
+      const [dbData, dbSettings] = await Promise.all([
+        db.getData(),
+        db.getSettings()
+      ]);
       setData(dbData);
+      setSettings(prev => ({ ...prev, ...dbSettings }));
     };
     init();
 
@@ -1123,7 +1163,7 @@ function App() {
             position: 'relative'
           }}>
             <img 
-              src="/logo.png" 
+              src={settings?.logo_base64 || "/logo.png"} 
               alt="Logo" 
               style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} 
               onError={(e) => e.target.style.opacity = 0} 
@@ -1266,9 +1306,14 @@ function App() {
             <Masters 
               users={data.users} 
               currentUser={user}
+              settings={settings}
               onUpdate={async () => {
-                const dbData = await db.getData();
+                const [dbData, dbSettings] = await Promise.all([
+                  db.getData(),
+                  db.getSettings()
+                ]);
                 setData(dbData);
+                setSettings(prev => ({ ...prev, ...dbSettings }));
               }} 
             />
           )}

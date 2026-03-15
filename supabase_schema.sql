@@ -76,3 +76,12 @@ CREATE TABLE users (
 -- Insertar Usuario Administrador por defecto
 INSERT INTO users (username, password, name, role) 
 VALUES ('admin', '123', 'Usuario Administrador', 'Administrador');
+-- 8. Configuración General
+CREATE TABLE settings (
+  key TEXT PRIMARY KEY,
+  value TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- Insertar logo inicial (placeholder)
+INSERT INTO settings (key, value) VALUES ('logo_base64', null);

@@ -180,5 +180,19 @@ export const db = {
 
     if (error) throw error;
     return data;
+  },
+
+  async getSettings() {
+    const { data } = await supabase.from('settings').select('*');
+    const settings = {};
+    if (data) {
+      data.forEach(s => settings[s.key] = s.value);
+    }
+    return settings;
+  },
+
+  async updateSetting(key, value) {
+    const { error } = await supabase.from('settings').upsert({ key, value, updated_at: new Date() });
+    if (error) throw error;
   }
 };

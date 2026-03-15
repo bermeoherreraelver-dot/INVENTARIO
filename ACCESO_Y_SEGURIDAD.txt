@@ -1,0 +1,25 @@
+📌 RESUMEN DE PROYECTO - GRAVITU INVENTORY
+
+Este archivo contiene los accesos principales a tu ecosistema de software.
+
+1. APLICACIÓN EN VIVO (Link para Clientes):
+   URL: https://inventario-orpin-iota.vercel.app/
+   
+2. ACCESOS DE PRUEBA:
+   - Administrador: admin / 123
+   - Supervisor: supervisor / 123 (Si lo creaste)
+   
+3. BASE DE DATOS (Supabase):
+   - Panel: https://supabase.com/
+   - Proyecto: Gravitu Inventory
+   - Nota: Los datos ya no se borran al limpiar el navegador.
+
+4. CÓDIGO FUENTE (GitHub):
+   - Repositorio: https://github.com/bermeoherreraelver-dot/INVENTARIO.git
+   
+5. TECNOLOGÍAS USADAS:
+   - Frontend: React + Vite + Tailwind/Lucide
+   - Backend/DB: Supabase (PostgreSQL)
+   - Hosting: Vercel
+
+¡Tu aplicación ya es un producto comercial listo para crecer!

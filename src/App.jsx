@@ -203,9 +203,9 @@ const Login = ({ onLogin }) => {
             background: 'linear-gradient(135deg, var(--primary), var(--accent))',
             margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: 'white', fontSize: '2rem', fontWeight: 800
-          }}>G</div>
+          }}>I</div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.5rem' }}>Bienvenido</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Ingrese sus credenciales de GRAVITU</p>
+          <p style={{ color: 'var(--text-muted)' }}>Ingrese sus credenciales de INVENTARIO</p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -1104,8 +1104,8 @@ function App() {
             color: 'white',
             fontWeight: 800,
             flexShrink: 0
-          }}>G</div>
-          {isSidebarOpen && <span style={{ fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>GRAVITU</span>}
+          }}>I</div>
+          {isSidebarOpen && <span style={{ fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>INVENTARIO</span>}
         </div>
 
         <nav style={{ flex: 1, padding: '0 0.75rem' }}>

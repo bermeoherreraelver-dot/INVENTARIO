@@ -42,13 +42,18 @@ const Dashboard = ({ data }) => {
     const qty = Object.keys(data.stock)
       .filter(k => k.startsWith(`${p.id}_`))
       .reduce((acc, k) => acc + data.stock[k].qty, 0);
-    return { name: p.sku, value: qty * p.cost };
+    return { name: p.sku, value: qty };
   });
 
-  const totalValue = stockValuation.reduce((a, b) => a + b.value, 0);
+  const totalItems = data.products.reduce((acc, p) => {
+    const qty = Object.keys(data.stock)
+      .filter(k => k.startsWith(`${p.id}_`))
+      .reduce((a, k) => a + data.stock[k].qty, 0);
+    return acc + qty;
+  }, 0);
 
   const stats = [
-    { label: 'Valor Total', value: `S/ ${totalValue.toLocaleString()}`, icon: Package, color: 'var(--primary)' },
+    { label: 'Stock Total', value: totalItems.toLocaleString(), icon: Package, color: 'var(--primary)' },
     { label: 'Movimientos', value: data.movements.length.toString(), icon: Clock, color: 'var(--success)' },
     {
       label: 'Alertas', value: data.products.filter(p => {
@@ -102,7 +107,7 @@ const Dashboard = ({ data }) => {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
         <div className="card p-6" style={{ height: '350px' }}>
-          <h3 style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Valorización por Producto (S/)</h3>
+          <h3 style={{ marginBottom: '1.5rem', fontSize: '1rem' }}>Stock por Producto</h3>
           <ResponsiveContainer width="100%" height="80%">
             <BarChart data={stockValuation}>
               <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
@@ -319,7 +324,7 @@ const Products = ({ products, data, onUpdate }) => {
               <th style={{ padding: '1rem', textAlign: 'left' }}>Categoría</th>
               <th style={{ padding: '1rem', textAlign: 'left' }}>U.M.</th>
               <th style={{ padding: '1rem', textAlign: 'right' }}>Stock Total</th>
-              <th style={{ padding: '1rem', textAlign: 'right' }}>Costo Prom.</th>
+              {/* <th style={{ padding: '1rem', textAlign: 'right' }}>Costo Prom.</th> */}
             </tr>
           </thead>
           <tbody>
@@ -337,7 +342,7 @@ const Products = ({ products, data, onUpdate }) => {
                     .reduce((acc, k) => acc + data.stock[k].qty, 0)
                   }
                 </td>
-                <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 600 }}>S/ {p.cost.toFixed(2)}</td>
+                {/* <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 600 }}>S/ {p.cost.toFixed(2)}</td> */}
               </tr>
             ))}
             {filteredProducts.length === 0 && (
@@ -658,9 +663,9 @@ const Movements = ({ movements, products, warehouses, onUpdate }) => {
                   <input
                     type="number"
                     step="0.01"
-                    style={{ width: '100%', height: '45px', opacity: formData.type === 'salida' ? 0.5 : 1 }}
+                    style={{ width: '100%', height: '45px', opacity: 0.5 }}
                     placeholder="0.00"
-                    disabled={formData.type === 'salida'}
+                    disabled={true}
                     onChange={e => setFormData({ ...formData, cost: e.target.value })}
                   />
                 </div>

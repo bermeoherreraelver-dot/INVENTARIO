@@ -195,7 +195,9 @@ const Login = ({ onLogin, settings }) => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      background: 'var(--bg-main)', 
+      backgroundImage: 'linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(/hosp-bg.png)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center',
@@ -230,7 +232,7 @@ const Login = ({ onLogin, settings }) => {
             </div>
           )}
           <div>
-            <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Usuario</label>
+            <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Usuario del Sistema</label>
             <input 
               type="text" 
               style={{ width: '100%', height: '45px' }} 
@@ -241,7 +243,7 @@ const Login = ({ onLogin, settings }) => {
             />
           </div>
           <div>
-            <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Contraseña</label>
+            <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Contraseña</label>
             <input 
               type="password" 
               style={{ width: '100%', height: '45px' }} 

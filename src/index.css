@@ -1,28 +1,29 @@
 :root {
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --bg-main: #0f172a;
-  --bg-card: #1e293b;
-  --bg-sidebar: #020617;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: #334155;
+  /* Paleta Médica Profesional - Telecomunicaciones Hospitalarias */
+  --primary: #0ea5e9;       /* Azul Cielo Médico */
+  --primary-hover: #0284c7;
+  --bg-main: #f8fafc;        /* Fondo claro y limpio de quirófano/clínica */
+  --bg-card: #ffffff;
+  --bg-sidebar: #0f172a;     /* Azul oscuro para contraste de navegación */
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
-  --accent: #8b5cf6;
+  --accent: #2dd4bf;        /* Verde menta/teal quirúrgico */
   
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
   
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.25s ease;
 }
 
 * {

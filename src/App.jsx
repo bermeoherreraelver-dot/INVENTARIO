@@ -933,13 +933,19 @@ const Requisitions = ({ requisitions, products, onUpdate }) => {
 
 // --- Masters Page (Almacenes, Proveedores) ---
 // --- Masters Page (Almacenes, Proveedores, Usuarios) ---
-const Masters = ({ users = [], onUpdate, currentUser, settings }) => {
+const Masters = ({ users = [], warehouses = [], onUpdate, currentUser, settings }) => {
   const [showUserModal, setShowUserModal] = useState(false);
+  const [showWarehouseModal, setShowWarehouseModal] = useState(false);
   const [userForm, setUserForm] = useState({
     username: '',
     password: '',
     name: '',
     role: 'Operador'
+  });
+  const [warehouseForm, setWarehouseForm] = useState({
+    name: '',
+    code: '',
+    address: ''
   });
 
   const handleAddUser = async (e) => {
@@ -949,6 +955,19 @@ const Masters = ({ users = [], onUpdate, currentUser, settings }) => {
       setShowUserModal(false);
       onUpdate();
       alert('Usuario creado con éxito');
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleAddWarehouse = async (e) => {
+    e.preventDefault();
+    try {
+      await db.addWarehouse(warehouseForm);
+      setShowWarehouseModal(false);
+      setWarehouseForm({ name: '', code: '', address: '' });
+      onUpdate();
+      alert('Almacén/Obra agregado con éxito');
     } catch (err) {
       alert(err.message);
     }
@@ -984,13 +1003,18 @@ const Masters = ({ users = [], onUpdate, currentUser, settings }) => {
 
         <div className="card p-6">
           <div className="flex justify-between mb-4">
-            <h3 className="flex items-center gap-2"><Building2 size={20} /> Almacenes</h3>
-            <button style={{ color: 'var(--primary)', fontWeight: 600 }}>+ Agregar</button>
+            <h3 className="flex items-center gap-2"><Building2 size={20} /> Almacenes / Obras / Lugares</h3>
+            <button 
+              onClick={() => setShowWarehouseModal(true)}
+              style={{ color: 'var(--primary)', fontWeight: 600 }}>+ Agregar</button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {['Principal', 'Norte', 'Oeste'].map(wh => (
-              <div key={wh} className="p-3 bg-main rounded-lg flex justify-between items-center" style={{ background: 'var(--bg-main)', border: '1px solid var(--border)' }}>
-                <span>{wh}</span>
+            {warehouses.map(wh => (
+              <div key={wh.id} className="p-3 bg-main rounded-lg flex justify-between items-center" style={{ background: 'var(--bg-main)', border: '1px solid var(--border)' }}>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{wh.name}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{wh.code} • {wh.address || 'Sin dirección'}</div>
+                </div>
                 <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', background: 'var(--success)20', color: 'var(--success)', borderRadius: '10px' }}>Activo</span>
               </div>
             ))}
@@ -1307,6 +1331,7 @@ function App() {
           {activeTab === 'masters' && (
             <Masters 
               users={data.users} 
+              warehouses={data.warehouses}
               currentUser={user}
               settings={settings}
               onUpdate={async () => {

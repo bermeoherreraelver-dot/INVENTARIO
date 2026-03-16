@@ -194,5 +194,16 @@ export const db = {
   async updateSetting(key, value) {
     const { error } = await supabase.from('settings').upsert({ key, value, updated_at: new Date() });
     if (error) throw error;
+  },
+
+  async addWarehouse(warehouse) {
+    const { data, error } = await supabase.from('warehouses').insert([{
+      name: warehouse.name,
+      code: warehouse.code,
+      address: warehouse.address
+    }]).select().single();
+    
+    if (error) throw error;
+    return data;
   }
 };

@@ -385,25 +385,25 @@ const Products = ({ products, data, onUpdate }) => {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div className="flex gap-4">
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>SKU (Código)</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>SKU (Código)</label>
                   <input type="text" style={{ width: '100%', height: '45px' }} placeholder="PROD-001" onChange={e => setFormData({ ...formData, sku: e.target.value })} required />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Categoría</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Categoría</label>
                   <input type="text" style={{ width: '100%', height: '45px' }} placeholder="Ej: Herramientas" onChange={e => setFormData({ ...formData, category: e.target.value })} required />
                 </div>
               </div>
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Nombre o Descripción</label>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Nombre o Descripción</label>
                 <input type="text" style={{ width: '100%', height: '45px' }} placeholder="Ej: Taladro Percutor 20V" onChange={e => setFormData({ ...formData, name: e.target.value })} required />
               </div>
               <div className="flex gap-4">
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>U.M. (Unidad de Medida)</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>U.M. (Unidad de Medida)</label>
                   <input type="text" style={{ width: '100%', height: '45px' }} placeholder="Und, Kg, Metro" onChange={e => setFormData({ ...formData, unit: e.target.value })} required />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Stock Mínimo (Alerta)</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Stock Mínimo (Alerta)</label>
                   <input type="number" style={{ width: '100%', height: '45px' }} placeholder="0" onChange={e => setFormData({ ...formData, min: e.target.value })} required />
                 </div>
               </div>
@@ -421,18 +421,30 @@ const Products = ({ products, data, onUpdate }) => {
 };
 
 // --- Movements Page ---
-const Movements = ({ movements, products, warehouses, onUpdate }) => {
+const Movements = ({ movements, products, warehouses, onUpdate, currentUser }) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     type: 'entrada',
-    warehouseId: warehouses[0]?.id || '',
-    productId: products[0]?.id || '',
-    qty: 0,
+    warehouseId: '',
+    productId: '',
+    qty: '',
     cost: 0,
     docRef: '',
     reason: ''
   });
+
+  // Asegurar que haya un almacén y producto seleccionados al abrir el modal
+  useEffect(() => {
+    if (showModal) {
+      setFormData(prev => ({
+        ...prev,
+        warehouseId: prev.warehouseId || (warehouses[0]?.id || ''),
+        productId: prev.productId || (products[0]?.id || ''),
+        qty: ''
+      }));
+    }
+  }, [showModal, warehouses, products]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -442,7 +454,7 @@ const Movements = ({ movements, products, warehouses, onUpdate }) => {
         warehouseId: formData.warehouseId,
         docRef: formData.docRef,
         reason: formData.reason,
-        userId: 'admin'
+        userId: currentUser?.username || 'admin'
       }, [{
         productId: formData.productId,
         qty: Number(formData.qty),
@@ -623,11 +635,11 @@ const Movements = ({ movements, products, warehouses, onUpdate }) => {
             border: '1px solid rgba(255,255,255,0.15)',
             position: 'relative'
           }}>
-            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>Nuevo Movimiento</h2>
+            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)' }}>Nuevo Movimiento</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div className="flex gap-4">
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Tipo de Operación</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Tipo de Operación</label>
                   <select
                     style={{ width: '100%', height: '45px' }}
                     value={formData.type}
@@ -638,7 +650,7 @@ const Movements = ({ movements, products, warehouses, onUpdate }) => {
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Almacén</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Almacén</label>
                   <select
                     style={{ width: '100%', height: '45px' }}
                     value={formData.warehouseId}
@@ -650,7 +662,7 @@ const Movements = ({ movements, products, warehouses, onUpdate }) => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Producto a Movilizar</label>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Producto a Movilizar</label>
                 <select
                   style={{ width: '100%', height: '45px' }}
                   value={formData.productId}
@@ -662,33 +674,38 @@ const Movements = ({ movements, products, warehouses, onUpdate }) => {
 
               <div className="flex gap-4">
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Cantidad</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Cantidad</label>
                   <input
+                    type="number"
                     step="0.01"
                     style={{ width: '100%', height: '45px' }}
                     placeholder="0.00"
+                    value={formData.qty}
                     onChange={e => setFormData({ ...formData, qty: e.target.value })}
+                    required
                   />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Costo Unit. (S/)</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Costo Unit. (S/)</label>
                   <input
                     type="number"
                     step="0.01"
                     style={{ width: '100%', height: '45px', opacity: 0.5 }}
                     placeholder="0.00"
                     disabled={true}
+                    value={formData.cost}
                     onChange={e => setFormData({ ...formData, cost: e.target.value })}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Referencia (Documento)</label>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Referencia (Documento)</label>
                 <input
                   type="text"
                   style={{ width: '100%', height: '45px' }}
                   placeholder="Ej: Factura F001-1234"
+                  value={formData.docRef}
                   onChange={e => setFormData({ ...formData, docRef: e.target.value })}
                 />
               </div>
@@ -896,22 +913,22 @@ const Requisitions = ({ requisitions, products, onUpdate }) => {
             <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>Nuevo Requerimiento</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Área u Obra Destino</label>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Área u Obra Destino</label>
                 <input type="text" style={{ width: '100%', height: '45px' }} placeholder="Ej: Obra Calle San Isidro" onChange={e => setFormData({ ...formData, area: e.target.value })} />
               </div>
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Producto Solicitado</label>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Producto Solicitado</label>
                 <select style={{ width: '100%', height: '45px' }} onChange={e => setFormData({ ...formData, productId: e.target.value })}>
                   {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </div>
               <div className="flex gap-4">
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Cantidad</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Cantidad</label>
                   <input type="number" style={{ width: '100%', height: '45px' }} placeholder="0" onChange={e => setFormData({ ...formData, qty: e.target.value })} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', display: 'block', marginBottom: '0.5rem' }}>Prioridad</label>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '0.5rem' }}>Prioridad</label>
                   <select style={{ width: '100%', height: '45px' }} onChange={e => setFormData({ ...formData, priority: e.target.value })}>
                     <option value="media">Rutinaria (Media)</option>
                     <option value="alta">Urgente (Alta)</option>
@@ -1005,8 +1022,22 @@ const Masters = ({ users = [], warehouses = [], onUpdate, currentUser, settings 
           <div className="flex justify-between mb-4">
             <h3 className="flex items-center gap-2"><Building2 size={20} /> Almacenes / Obras / Lugares</h3>
             <button 
-              onClick={() => setShowWarehouseModal(true)}
-              style={{ color: 'var(--primary)', fontWeight: 600 }}>+ Agregar</button>
+              id="btn-add-warehouse"
+              onClick={() => {
+                console.log('Opening Warehouse Modal (Edge-Compat)');
+                setShowWarehouseModal(true);
+              }}
+              style={{ 
+                background: 'var(--primary)', 
+                color: 'white', 
+                padding: '0.4rem 1.2rem', 
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+              }}>
+              + Agregar Nuevo
+            </button>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {warehouses.map(wh => (
@@ -1106,6 +1137,37 @@ const Masters = ({ users = [], warehouses = [], onUpdate, currentUser, settings 
         </div>,
         document.body
       )}
+
+      {showWarehouseModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+          background: 'rgba(2, 6, 23, 0.95)', backdropFilter: 'blur(12px)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999999,
+          padding: '2rem', overflowY: 'auto'
+        }}>
+          <div className="card p-8 animate-fade-in" style={{ width: '100%', maxWidth: '400px', margin: 'auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
+            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)' }}>Nuevo Lugar / Obra</h2>
+            <form onSubmit={handleAddWarehouse} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Nombre del Lugar / Obra</label>
+                <input type="text" style={{ width: '100%' }} placeholder="Ej: Obra Hospital Lima" value={warehouseForm.name} onChange={e => setWarehouseForm({...warehouseForm, name: e.target.value})} required />
+              </div>
+              <div>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Código (Opcional)</label>
+                <input type="text" style={{ width: '100%' }} placeholder="HOSP-01" value={warehouseForm.code} onChange={e => setWarehouseForm({...warehouseForm, code: e.target.value})} />
+              </div>
+              <div>
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>Dirección / Ubicación</label>
+                <input type="text" style={{ width: '100%' }} placeholder="Av. Principal 123..." value={warehouseForm.address} onChange={e => setWarehouseForm({...warehouseForm, address: e.target.value})} />
+              </div>
+              <div className="flex gap-3 mt-4">
+                <button type="button" onClick={() => setShowWarehouseModal(false)} style={{ flex: 1, padding: '0.75rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', color: 'var(--text-main)' }}>Cancelar</button>
+                <button type="submit" style={{ flex: 1, padding: '0.75rem', background: 'var(--primary)', color: 'white', borderRadius: 'var(--radius-md)', fontWeight: 700 }}>Guardar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -1196,7 +1258,12 @@ function App() {
             />
             <span style={{ pointerEvents: 'none' }}>I</span>
           </div>
-          {isSidebarOpen && <span style={{ fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>INVENTARIO</span>}
+          {isSidebarOpen && (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.5px' }}>INVENTARIO</span>
+              <span style={{ fontSize: '0.65rem', color: 'var(--primary)', fontWeight: 800, opacity: 0.8 }}>VERSION v2.8 PRO</span>
+            </div>
+          )}
         </div>
 
         <nav style={{ flex: 1, padding: '0 0.75rem' }}>
@@ -1312,6 +1379,7 @@ function App() {
               movements={data.movements}
               products={data.products}
               warehouses={data.warehouses}
+              currentUser={user}
               onUpdate={async () => {
                 const dbData = await db.getData();
                 setData(dbData);
